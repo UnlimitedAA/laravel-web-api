@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Attraction as AttractionResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class City extends JsonResource
 {
@@ -18,7 +18,7 @@ class City extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'attractions' => AttractionResource::collection($this->whenLoaded('attractions'))
+            'attractions' => AttractionResource::collection($this->whenLoaded('attractions')),
         ];
     }
 }

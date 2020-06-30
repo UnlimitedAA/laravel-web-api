@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use DB;
 use App\City;
+use DB;
+use Illuminate\Console\Command;
 
 class ImportFile extends Command
 {
@@ -39,7 +39,6 @@ class ImportFile extends Command
      */
     public function handle()
     {
-
         $target = $this->ask('Where is the file located at?');
         $cityTable = $this->ask('What is the table name to save the data to?');
         $attractionTable = $this->ask('What is the table name to save the data to?');
@@ -50,25 +49,27 @@ class ImportFile extends Command
 
         $CSVFile = $target;
 
-        if(!file_exists($CSVFile) || !is_readable($CSVFile)) {
+        if (! file_exists($CSVFile) || ! is_readable($CSVFile)) {
             $this->error('File not found');
+
             return 0;
         }
 
         $header = null;
-        $data = array();
+        $data = [];
 
-        if (($handle = fopen($CSVFile,'r')) !== false){
-            while (($row = fgetcsv($handle, 1000, ',')) !==false){
-                if (!$header) {
+        if (($handle = fopen($CSVFile, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (! $header) {
                     $header = $row;
                     if ($header[0] !== 'name' || $header[1] !== 'city') {
                         $this->error('Your CSV file need to contain city and name header!');
+
                         return;
                     }
-                }
-                else
+                } else {
                     $data[] = array_combine($header, $row);
+                }
             }
             fclose($handle);
         }
@@ -79,43 +80,36 @@ class ImportFile extends Command
         $citiesCache = DB::table('cities')->select('id', 'name as city')->pluck('city', 'id')->toArray();
         $attractionsCache = DB::table('attractions')->select('city_id', 'name')->pluck('name', 'city_id')->toArray();
 
-        for ($i = 0; $i < $dataCount; $i ++){
-
+        for ($i = 0; $i < $dataCount; $i++) {
             try {
                 $city = $data[$i]['city'];
                 $attraction = $data[$i]['name'];
 
                 // Search for existing city, if city is not found in cache then insert new one
                 if (! $cityId = array_search($city, $citiesCache)) {
-
                     $cityId = DB::table($cityTable)->insertGetId([
                         'name' => $city,
-                        'created_at' => date("Y-m-d h:i:s"),
-                        'updated_at' => date("Y-m-d h:i:s"),
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
                     ]);
 
                     // Push city to cache
                     $citiesCache[$cityId] = $city;
-
                 }
 
                 DB::table($attractionTable)->insert([
                     'name' => $attraction,
                     'city_id' => $cityId,
-                    'created_at' => date("Y-m-d h:i:s"),
-                    'updated_at' => date("Y-m-d h:i:s"),
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
                 ]);
-
             } catch (\Exception $th) {
-
                 $this->error('Skipping duplicates!');
             }
-
         }
 
-        $this->info("Data added successfully");
+        $this->info('Data added successfully');
 
         return 1;
-
     }
 }

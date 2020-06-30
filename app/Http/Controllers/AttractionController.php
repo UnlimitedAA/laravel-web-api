@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Resources\Attraction as AttractionResource;
 use App\Attraction;
+use App\Http\Resources\Attraction as AttractionResource;
+use Illuminate\Http\Request;
 
 class AttractionController extends Controller
 {
@@ -32,10 +32,11 @@ class AttractionController extends Controller
         ]);
 
         $attraction = Attraction::create($validatedData);
+
         return new AttractionResource($attraction);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -45,7 +46,6 @@ class AttractionController extends Controller
     {
         return new AttractionResource($attraction->load('city'));
     }
-
 
     /**
      * Update the specified resource in storage.
