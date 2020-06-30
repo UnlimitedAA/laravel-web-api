@@ -13,9 +13,7 @@ class ImportFile extends Command
      *
      * @var string
      */
-    protected $signature = 'file:import {target : The location of file to import}
-        {cityTable=cities : City table name}
-        {attractionTable=attractions : Attraction table name}';
+    protected $signature = 'file:import';
 
     /**
      * The console command description.
@@ -41,17 +39,21 @@ class ImportFile extends Command
      */
     public function handle()
     {
-        // $target = $this->ask('Where is the file located at?');
-        // $cityTable = $this->ask('What is the table name to save the data to?');
-        // $attractionTable = $this->ask('What is the table name to save the data to?');
 
-        $target = $this->argument('target');
-        $cityTable = $this->argument('cityTable');
-        $attractionTable = $this->argument('attractionTable');
+        $target = $this->ask('Where is the file located at?');
+        $cityTable = $this->ask('What is the table name to save the data to?');
+        $attractionTable = $this->ask('What is the table name to save the data to?');
+
+        // $target = $this->argument('target');
+        // $cityTable = $this->argument('cityTable');
+        // $attractionTable = $this->argument('attractionTable');
 
         $CSVFile = $target;
-        if(!file_exists($CSVFile) || !is_readable($CSVFile))
-            return false;
+
+        if(!file_exists($CSVFile) || !is_readable($CSVFile)) {
+            $this->error('File not found');
+            return 0;
+        }
 
         $header = null;
         $data = array();
@@ -112,6 +114,8 @@ class ImportFile extends Command
         }
 
         $this->info("Data added successfully");
+
+        return 1;
 
     }
 }
