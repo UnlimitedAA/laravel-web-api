@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\Attraction;
+use App\City;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\City;
-use App\Attraction;
 
 class CityControllerTest extends TestCase
 {
     use RefreshDatabase;
-
 
     public function setUp(): void
     {
@@ -35,20 +34,19 @@ class CityControllerTest extends TestCase
         $city = factory(City::class)->create();
         $city->attractions()->save(factory(Attraction::class)->make());
 
-        $response = $this->json('DELETE', '/api/cities/' . $city->id);
+        $response = $this->json('DELETE', '/api/cities/'.$city->id);
 
         $response->assertStatus(204);
 
         $this->assertDeleted($city);
         $this->assertCount(0, Attraction::all());
-
     }
 
     public function test_city_can_be_edited()
     {
         $city = factory(City::class)->create(['name' => 'Kuala Lumpur']);
 
-        $response = $this->json('PUT', '/api/cities/' . $city->id, [
+        $response = $this->json('PUT', '/api/cities/'.$city->id, [
             'name' => 'Melbourne',
         ]);
 

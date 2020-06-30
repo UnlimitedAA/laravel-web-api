@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Attraction;
+use App\City;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\City;
-use App\Attraction;
 
 class AttractionControllerTest extends TestCase
 {
@@ -37,7 +37,7 @@ class AttractionControllerTest extends TestCase
         $city->attractions()->save(factory(Attraction::class)->make());
         $attraction = $city->attractions->first();
 
-        $response = $this->json('DELETE', '/api/attractions/' . $attraction->id);
+        $response = $this->json('DELETE', '/api/attractions/'.$attraction->id);
 
         $response->assertStatus(204);
         $this->assertDeleted($attraction);
@@ -53,9 +53,9 @@ class AttractionControllerTest extends TestCase
         );
         $attraction = $city->attractions->first();
 
-        $response = $this->json('PUT', '/api/attractions/' . $attraction->id, [
+        $response = $this->json('PUT', '/api/attractions/'.$attraction->id, [
             'name' => 'Lake',
-            'city_id' => $city->id
+            'city_id' => $city->id,
         ]);
 
         $response->assertStatus(200);

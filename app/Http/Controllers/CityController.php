@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Resources\City as CityResource;
 use App\City;
+use App\Http\Resources\City as CityResource;
+use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
@@ -18,7 +17,6 @@ class CityController extends Controller
     {
         return CityResource::collection(City::with('attractions')->get());
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -33,6 +31,7 @@ class CityController extends Controller
         ]);
 
         $city = City::create($validatedData);
+
         return new CityResource($city);
     }
 
@@ -46,7 +45,6 @@ class CityController extends Controller
     {
         return new CityResource($city->load('attractions'));
     }
-
 
     /**
      * Update the specified resource in storage.

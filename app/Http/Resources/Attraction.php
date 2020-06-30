@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\City as CityResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class Attraction extends JsonResource
 {
