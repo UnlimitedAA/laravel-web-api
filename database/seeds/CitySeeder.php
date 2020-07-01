@@ -15,7 +15,7 @@ class CitySeeder extends Seeder
             ->create()
             ->each(function ($city) {
                 $city->attractions()->createMany(
-                    factory(App\Attraction::class, rand(1,10))->make()->toArray()
+                    factory(App\Attraction::class, rand(1, 10))->make()->toArray()
                 );
             });
     }
