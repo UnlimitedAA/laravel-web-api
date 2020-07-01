@@ -11,10 +11,12 @@ class CitySeeder extends Seeder
      */
     public function run()
     {
-        factory(App\City::class, 50)
+        factory(App\City::class, 500)
             ->create()
             ->each(function ($city) {
-                $city->posts()->save(factory(App\Attraction::class)->make());
+                $city->attractions()->createMany(
+                    factory(App\Attraction::class, rand(1,10))->make()->toArray()
+                );
             });
     }
 }

@@ -8,6 +8,5 @@ use Faker\Generator as Faker;
 $factory->define(Attraction::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->city,
-        'city_id' => factory(App\City::class),
     ];
 });

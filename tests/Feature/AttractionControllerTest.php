@@ -23,7 +23,9 @@ class AttractionControllerTest extends TestCase
     {
         $city = factory(City::class)->create();
         $city->attractions()->save(factory(Attraction::class)->make());
-        $attraction = factory(Attraction::class, 3)->create();
+        $attraction = factory(Attraction::class, 3)->create([
+            'city_id' => factory(City::class),
+        ]);
 
         $response = $this->json('GET', '/api/attractions');
 
